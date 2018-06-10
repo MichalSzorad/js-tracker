@@ -11,7 +11,7 @@ async function getCount({ get = load } = {}) {
 }
 
 async function saveData(dataObject, { append = appendFile } = {}) {
-  return await append("logs.txt", JSON.stringify(dataObject));
+  return await append("logs.txt", JSON.stringify(dataObject) + "\n");
 }
 
 module.exports = {

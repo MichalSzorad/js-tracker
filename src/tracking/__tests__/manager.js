@@ -40,7 +40,7 @@ describe("saveData", () => {
     await saveData(data, { append });
     expect(append.mock.calls.pop()).toEqual([
       "logs.txt",
-      JSON.stringify(data),
+      JSON.stringify(data) + "\n",
     ]);
   });
 });
