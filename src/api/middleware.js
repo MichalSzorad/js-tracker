@@ -1,8 +1,14 @@
-const notFoundHandler = config => (req, res, next) => {
+const defaultLogger = () => {};
+
+const notFoundHandler = (config = {}) => (req, res) => {
+  const { log = defaultLogger } = config;
+  log(req);
   return res.status(404).json({ message: "Route not found" });
 };
 
-const errorHandler = config => (error, req, res, next) => {
+const errorHandler = (config = {}) => (error, req, res) => {
+  const { log = defaultLogger } = config;
+  log(error, req);
   return res.status(error.status || 500).json({ message: error.message });
 };
 

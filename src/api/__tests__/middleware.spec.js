@@ -10,8 +10,9 @@ const createMocks = () => {
     json: jest.fn(),
     status: jest.fn().mockReturnThis(),
   };
+  const log = jest.fn();
 
-  return { next: nextMock, res };
+  return { log, next: nextMock, res };
 };
 
 const stringify = obj => JSON.stringify(obj);
@@ -21,6 +22,17 @@ describe("errorHandler", () => {
     const { next, res } = createMocks();
     errorHandler()(new Error(123), {}, res, next);
     expect(next.mock.calls.length).toBe(0);
+  });
+
+  it("Calls log function on error", () => {
+    const { next, res, log } = createMocks();
+    const error = new Error("foo");
+    const req = {};
+    errorHandler({ log })(error, req, res, next);
+
+    expect(log.mock.calls.length).toBe(1);
+    expect(log.mock.calls[0][0]).toBe(error);
+    expect(log.mock.calls[0][1]).toBe(req);
   });
 
   it("Prints the error message", () => {
@@ -52,6 +64,15 @@ describe("notFoundHandler", () => {
     const { next, res } = createMocks();
     notFoundHandler()({}, res, next);
     expect(next.mock.calls.length).toBe(0);
+  });
+
+  it("Calls log function", () => {
+    const { next, res, log } = createMocks();
+    const req = {};
+    notFoundHandler({ log })(req, res, next);
+
+    expect(log.mock.calls.length).toBe(1);
+    expect(log.mock.calls[0][0]).toBe(req);
   });
 
   it("Prints the not found message", () => {

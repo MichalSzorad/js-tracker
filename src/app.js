@@ -6,6 +6,17 @@ const app = express();
 const { notFoundHandler, errorHandler } = require("./api/middleware");
 const trackingRoutes = require("./tracking/routes");
 
+const {
+  logNotFoundError,
+  logUncaughtError,
+  logUnhandledApiError,
+  logUnhandledRejection,
+} = require("./logger/logging");
+
+// catch process unhandled errors
+process.on("unhandledRejection", logUnhandledRejection);
+process.on("uncaughtException", logUncaughtError);
+
 // parsers
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -14,7 +25,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(trackingRoutes);
 
 // handlers
-app.use(notFoundHandler());
-app.use(errorHandler());
+app.use(notFoundHandler({ log: logNotFoundError }));
+app.use(errorHandler({ log: logUnhandledApiError }));
 
 app.listen(PORT);
