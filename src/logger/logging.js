@@ -1,3 +1,5 @@
+// setup sentry/save errors to file/log errors
+
 function logUncaughtError(error) {
   console.log("Caught exception:", error);
 }
