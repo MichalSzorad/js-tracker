@@ -1,5 +1,6 @@
 const {
   errorHandler,
+  headers,
   notFoundHandler,
   successHandler,
 } = require("../middleware");
@@ -8,6 +9,7 @@ const createMocks = () => {
   const nextMock = jest.fn();
   const res = {
     json: jest.fn(),
+    set: jest.fn().mockReturnThis(),
     status: jest.fn().mockReturnThis(),
   };
   const log = jest.fn();
@@ -110,5 +112,19 @@ describe("successHandler", () => {
     successHandler({ status })({}, res, next);
 
     expect(res.status.mock.calls[0]).toContain(status);
+  });
+});
+
+describe("headers", () => {
+  it("Does call next", () => {
+    const { next, res } = createMocks();
+    headers()({}, res, next);
+    expect(next.mock.calls.length).toBe(1);
+  });
+
+  it("Sets correct content-type headers", () => {
+    const { req, res, next } = createMocks();
+    headers()(req, res, next);
+    expect(stringify(res.set.mock.calls)).toMatch("application/json");
   });
 });

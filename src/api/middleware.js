@@ -17,8 +17,14 @@ const successHandler = config => (req, res) => {
   return res.status(status).json({ result: true });
 };
 
+const headers = config => (req, res, next) => {
+  res.set("Content-Type", "application/json");
+  next();
+};
+
 module.exports = {
   errorHandler,
+  headers,
   notFoundHandler,
   successHandler,
 };
