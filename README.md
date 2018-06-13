@@ -9,6 +9,8 @@
 ```
 git clone https://github.com/MichalSzorad/js-tracker 
 
+cd js-tracker
+
 npm install
 
 npm test
