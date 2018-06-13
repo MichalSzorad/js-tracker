@@ -21,7 +21,7 @@ process.on("uncaughtException", logUncaughtError);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(headers);
+app.use(headers());
 
 // router logic
 app.use(trackingRoutes);
